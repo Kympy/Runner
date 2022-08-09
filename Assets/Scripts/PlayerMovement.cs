@@ -10,25 +10,31 @@ public class PlayerMovement : MonoBehaviour
     private float jumpPower = 0f;
     public float JumpPower { get { return jumpPower; } }
     private float maxJumpPower = 400f;
-    private float rayDistance = 1f;
+    private float rayDistance = 0.5f;
     private RaycastHit hit;
     private Rigidbody playerRigidbody;
+    private Animator anim;
 
     private void Awake()
     {
         playerRigidbody = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
     }
     private void Update()
     {
-        Debug.Log(jumpPower);
-        Debug.DrawRay(transform.position, Vector3.down * rayDistance, Color.red, 0.1f);
+        Debug.DrawRay(transform.position, Vector3.down * rayDistance, Color.red);
         if(Physics.Raycast(transform.position, Vector3.down, out hit, rayDistance))
         {
-            if(hit.transform.tag == "Tile")
+            if (hit.transform.tag == "Tile")
             {
                 isGrounded = true;
                 isJumpedSecond = false;
+                anim.SetBool("IsJump", false);
             }
+        }
+        else
+        {
+            anim.SetBool("IsJump", true);
         }
         if (Input.GetKeyDown(KeyCode.Space) && isJumpedSecond == false && isGrounded == false) // Double Jump
         {
@@ -38,12 +44,13 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.Space) && isGrounded) // Key Pushing
         {
-            jumpPower += Time.time;
+            jumpPower += Time.deltaTime * 1000f;
         }
-        if(Input.GetKeyUp(KeyCode.Space)) // Jump
+        if(Input.GetKeyUp(KeyCode.Space) && isGrounded) // Jump
         {
             if (isGrounded && isJumpedSecond == false)
             {
+                //anim.SetBool("IsJump", true); 
                 if (jumpPower > maxJumpPower)
                 {
                     jumpPower = maxJumpPower;
