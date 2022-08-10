@@ -36,23 +36,23 @@ public class GameManager : MonoBehaviour
     }
     private void Update()
     {
-        fillImg.value = player.JumpPower;
+        fillImg.value = player.JumpPower; // Update Jump power UI
         myScore.text = "SCORE : " + score.ToString();
-        if (Input.GetKeyDown(KeyCode.R) && isGameOver)
+        if (Input.GetKeyDown(KeyCode.R) && isGameOver) // Restart Game
         {
             Time.timeScale = 1f;
             myCanvas.alpha = 0f;
             isGameOver = false;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Get current Scene's build index and reload scene
         }
     }
-    public void CreateNextTile(Vector3 previousPos)
+    public void CreateNextTile(Vector3 previousPos) // Create Tile
     {
-        tileScale = Random.Range(4f, 10f);
-        previousPos += new Vector3(0f, 0f, Random.Range(5f, 9f));
-        previousPos.y = Random.Range(-2f, 1f);
-        nextTile = Instantiate(tileObj, previousPos, Quaternion.identity);
-        nextTile.transform.localScale = new Vector3(5f, 1f, tileScale);
+        tileScale = Random.Range(4f, 10f); // Set Tile Scalse
+        previousPos += new Vector3(0f, 0f, Random.Range(5f, 9f)); // Previous position + new Random Position
+        previousPos.y = Random.Range(-2f, 1f); // new Random Y position (up down)
+        nextTile = Instantiate(tileObj, previousPos, Quaternion.identity); // Create
+        nextTile.transform.localScale = new Vector3(5f, 1f, tileScale); // Set Scale
     }
     private void ChangeGameSpeed(float speed)
     {
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
-        Time.timeScale = 0f;
+        Time.timeScale = 0f; // Stop Game
         myCanvas.alpha = 1f;
         isGameOver = true;
     }

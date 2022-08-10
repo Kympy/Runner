@@ -22,19 +22,19 @@ public class PlayerMovement : MonoBehaviour
     }
     private void Update()
     {
-        Debug.DrawRay(transform.position, Vector3.down * rayDistance, Color.red);
-        if(Physics.Raycast(transform.position, Vector3.down, out hit, rayDistance))
+        //Debug.DrawRay(transform.position, Vector3.down * rayDistance, Color.red);
+        if(Physics.Raycast(transform.position, Vector3.down, out hit, rayDistance)) // Check Ground
         {
-            if (hit.transform.tag == "Tile")
+            if (hit.transform.tag == "Tile") // If Tile~
             {
-                isGrounded = true;
-                isJumpedSecond = false;
-                anim.SetBool("IsJump", false);
+                isGrounded = true; // Player is on the ground
+                isJumpedSecond = false; // Double jump not yet
+                anim.SetBool("IsJump", false); // Play animation
             }
         }
-        else
+        else // Player is not on the ground >> Player is jumping now
         {
-            anim.SetBool("IsJump", true);
+            anim.SetBool("IsJump", true); // Anim play
         }
         if (Input.GetKeyDown(KeyCode.Space) && isJumpedSecond == false && isGrounded == false) // Double Jump
         {
@@ -44,21 +44,20 @@ public class PlayerMovement : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.Space) && isGrounded) // Key Pushing
         {
-            jumpPower += Time.deltaTime * 1000f;
+            jumpPower += Time.deltaTime * 1000f; // Add jump power
         }
         if(Input.GetKeyUp(KeyCode.Space) && isGrounded) // Jump
         {
-            if (isGrounded && isJumpedSecond == false)
+            if (isGrounded && isJumpedSecond == false) // First Jump
             {
-                //anim.SetBool("IsJump", true); 
-                if (jumpPower > maxJumpPower)
+                if (jumpPower > maxJumpPower) // If jumpPower is too high,
                 {
-                    jumpPower = maxJumpPower;
+                    jumpPower = maxJumpPower; // Then restrict jump power
                 }
-                playerRigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
-                isGrounded = false;
+                playerRigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse); // Real Jump
+                isGrounded = false; // Player is jumping!!
             }
-            jumpPower = 0f;
+            jumpPower = 0f; // If jump end, reset jump power;
         }
     }
     private void OnTriggerEnter(Collider other)
